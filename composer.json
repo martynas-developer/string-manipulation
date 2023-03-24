@@ -1,8 +1,6 @@
 {
     "require": {
         "php": "8.2.*",
-        "ext-mbstring": "*",
-        "ext-intl" : "*",
         "symfony/dependency-injection": "^6.2"
     },
     "autoload": {
