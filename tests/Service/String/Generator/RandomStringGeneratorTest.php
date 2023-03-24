@@ -10,12 +10,12 @@ class RandomStringGeneratorTest extends TestCase
     public function testIsString(): void
     {
         $randomStringGenerator = new RandomStringGenerator(4);
-        $this->assertIsString($randomStringGenerator->generate());
+        $this->assertIsString($randomStringGenerator->get());
     }
 
     public function testStringLength(): void
     {
         $randomStringGenerator = new RandomStringGenerator(5);
-        $this->assertEquals(5, strlen($randomStringGenerator->generate()));
+        $this->assertEquals(5, strlen($randomStringGenerator->get()));
     }
 }

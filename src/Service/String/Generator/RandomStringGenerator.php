@@ -12,7 +12,7 @@ class RandomStringGenerator
         }
     }
 
-    public function generate(): string
+    public function get(): string
     {
         $pool = '0123456789abcdefghijklmnopqrstuvwxyz';
         $generatedString = '';
@@ -21,20 +21,5 @@ class RandomStringGenerator
             $generatedString .= $pool[random_int(0, $maxIndex)];
         }
         return $generatedString;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function generateArray(int $count): array
-    {
-        if ($count <= 0) {
-            throw new \LogicException($count . ' must be greater than 0');
-        }
-        $array = [];
-        for ($i = 0; $i < $count; $i++) {
-            $array[] = $this->generate();
-        }
-        return $array;
     }
 }

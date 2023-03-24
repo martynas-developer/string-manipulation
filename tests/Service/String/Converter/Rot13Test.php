@@ -11,7 +11,7 @@ class Rot13Test extends TestCase
     {
         $this->assertEquals(
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-            Rot13::convert('NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm')
+            Rot13::get('NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm')
         );
     }
 
@@ -19,12 +19,18 @@ class Rot13Test extends TestCase
     {
         $this->assertEquals(
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-            Rot13::convert(Rot13::convert('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'))
+            Rot13::get(Rot13::get('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'))
         );
     }
 
     public function testNumbersDontBreak(): void
     {
-        $this->assertEquals('123', Rot13::convert('123'));
+        $this->assertEquals('123', Rot13::get('123'));
+    }
+
+    public function testArray(): void
+    {
+        $this->assertEquals(['123','123'], Rot13::get(['123', '123']));
+        $this->assertEquals(['ABC','ABC'], Rot13::get(['NOP', 'NOP']));
     }
 }
