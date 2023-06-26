@@ -2,17 +2,16 @@
 
 namespace App\Tests\Service\String\Generator;
 
-use App\Service\String\Generator\RandomArrayGenerator;
-use App\Service\String\Generator\RandomStringGenerator;
+use App\Service\String\Generator\RandomArrayOfStringsGenerator;
 use PHPUnit\Framework\TestCase;
 
 class RandomArrayGeneratorTest extends TestCase
 {
     public function testAllAreStrings(): void
     {
-        $randomArrayGenerator = new RandomArrayGenerator(new RandomStringGenerator(5));
+        $randomArrayGenerator = new RandomArrayOfStringsGenerator(5, 5);
 
-        $array = $randomArrayGenerator->get();
+        $array = $randomArrayGenerator->generate();
         foreach ($array as $value) {
             $this->assertIsString($value);
         }

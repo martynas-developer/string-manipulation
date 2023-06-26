@@ -1,9 +1,33 @@
 <?php
 
+/**
+ * PHP version 8.2
+ *
+ * @category Class
+ * @package  Stringmanipulation
+ * @author   Martynas Dapkus <martynasdapkus94@gmail.com>
+ * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @link     http://www.hashbangcode.com/
+ */
+
 namespace App\Service\String\Generator;
 
+/**
+ * Random string generator
+ *
+ * @category Class
+ * @package  Stringmanipulation
+ * @author   Martynas Dapkus <martynasdapkus94@gmail.com>
+ * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @link     http://www.hashbangcode.com/
+ */
 class RandomStringGenerator
 {
+    /**
+     * Create a new random string generator of fixed length
+     *
+     * @param int $length length of random String
+     */
     public function __construct(
         private readonly int $length
     ) {
@@ -12,9 +36,15 @@ class RandomStringGenerator
         }
     }
 
-    public function get(): string
+    /**
+     * Generates a random string
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function generate(): string
     {
-        $pool = '0123456789abcdefghijklmnopqrstuvwxyz';
+        $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $generatedString = '';
         $maxIndex = strlen($pool) - 1;
         for ($i = 0; $i < $this->length; $i++) {

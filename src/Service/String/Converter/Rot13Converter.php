@@ -13,7 +13,7 @@
 namespace App\Service\String\Converter;
 
 /**
- * Converts a string by a following pattern Input: 22aAcd Output: 22/1/1/3/4
+ * Rotates a string by 13 places
  *
  * @category Class
  * @package  Stringmanipulation
@@ -21,13 +21,13 @@ namespace App\Service\String\Converter;
  * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @link     http://www.hashbangcode.com/
  */
-class StringToNumberStringConverter implements Converter
+class Rot13Converter implements Converter
 {
     /**
-     * Convert a string or array of strings
+     * Rotate a string or array of strings
      *
-     * @param string|string[] $strings strings to be converted
-     *
+     * @param string|string[] $strings strings to be rotated
+     * 
      * @return string|string[]
      */
     public static function convert(string|array $strings): string|array
@@ -42,11 +42,12 @@ class StringToNumberStringConverter implements Converter
         foreach ($strings as $string) {
             $convertedStrings[] = self::_convertString($string);
         }
+
         return $isArray ? $convertedStrings : $convertedStrings[0];
     }
 
     /**
-     * Converts string according to a pattern
+     * Converts a string to rot13 string
      *
      * @param string $string string to be converted
      *
@@ -54,20 +55,13 @@ class StringToNumberStringConverter implements Converter
      */
     private static function _convertString(string $string): string
     {
-        $separator = '/';
-        $array = preg_split(
-            '/([0-9]+|[a-zA-Z])/',
-            $string,
-            flags: PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE
-        ) ?: [];
-        foreach ($array as $key => $value) {
-            if (is_int($value)) {
-                $array[$key] = $value;
-            } else if (ctype_alpha($value)) {
-                $index = ord(strtolower($value));
-                $array[$key] =  $index - 96;
-            }
+        $inputSymbol = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        $outputSymbol = 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm';
+        $convertedString = '';
+        foreach (mb_str_split($string) as $symbol) {
+            $index = strpos($inputSymbol, $symbol);
+            $convertedString .= $index !== false ? $outputSymbol[$index] : $symbol;
         }
-        return implode($separator, $array);
+        return $convertedString;
     }
 }

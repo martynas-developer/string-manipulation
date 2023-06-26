@@ -18,5 +18,8 @@
         "phpunit/phpunit": "^10",
         "squizlabs/php_codesniffer": "*",
         "phpstan/phpstan": "^1.10"
+    },
+    "scripts": {
+        "ci": "./vendor/bin/phpunit tests && ./vendor/bin/phpstan --level=9 analyze src && ./vendor/bin/phpcs src"
     }
 }

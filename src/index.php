@@ -1,43 +1,77 @@
 <?php
 
+/**
+ * PHP version 8.2
+ *
+ * @category Class
+ * @package  Stringmanipulation
+ * @author   Martynas Dapkus <martynasdapkus94@gmail.com>
+ * @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
+ * @link     http://www.hashbangcode.com/
+ */
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use App\Service\String\Converter\Rot13;
+use App\Service\String\Converter\Converter;
+use App\Service\String\Converter\Rot13Converter;
 use App\Service\String\Converter\StringToNumberStringConverter;
-use App\Service\String\Generator\RandomArrayGenerator;
+use App\Service\String\Generator\RandomArrayOfStringsGenerator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use App\Service\String\Generator\RandomStringGenerator;
-use Symfony\Component\DependencyInjection\Reference;
 
+// Container setup
 $containerBuilder = new ContainerBuilder();
 $containerBuilder->setParameter('string.length', 10);
+$containerBuilder->setParameter('array.length', 10);
 $containerBuilder
-    ->register('string.generator.random_string_generator', RandomStringGenerator::class)
+    ->register(RandomStringGenerator::class, RandomStringGenerator::class)
     ->addArgument('%string.length%');
 
 $containerBuilder
-    ->register('string.generator.random_array_generator', RandomArrayGenerator::class)
-    ->addArgument(new Reference('string.generator.random_string_generator'));
+    ->register(
+        RandomArrayOfStringsGenerator::class,
+        RandomArrayOfStringsGenerator::class
+    )
+    ->addArgument('%array.length%')
+    ->addArgument('%string.length%');
 
-$containerBuilder->register('string.converter.string_to_number_string_converter', StringToNumberStringConverter::class);
-$containerBuilder->register('string.converter.rot13_converter', Rot13::class);
-
-$converterPool = [
-    $containerBuilder->get('string.converter.string_to_number_string_converter'),
-    $containerBuilder->get('string.converter.rot13_converter')
-];
+$containerBuilder->register(
+    StringToNumberStringConverter::class,
+    StringToNumberStringConverter::class
+);
+$containerBuilder->register(Rot13Converter::class, Rot13Converter::class);
 
 $generatorPool = [
-    $containerBuilder->get('string.generator.random_string_generator'),
-    $containerBuilder->get('string.generator.random_array_generator'),
-    $containerBuilder->get('string.generator.random_string_generator'),
-    $containerBuilder->get('string.generator.random_array_generator'),
+    $containerBuilder->get(RandomStringGenerator::class),
+    $containerBuilder->get(RandomArrayOfStringsGenerator::class),
 ];
+// End Of container setup
 
 foreach ($generatorPool as $generator) {
-    $randomConverter = $converterPool[random_int(0, count($converterPool) - 1)];
-    $randomStrings = $generator->get();
+    /**
+     * Generator variable
+     *
+     * @var RandomStringGenerator|RandomArrayOfStringsGenerator $generator
+    */
+    $randomConverter = getRandomConverter();
+    $randomStrings = $generator->generate();
     echo json_encode($randomStrings)
         . ' -> ' . get_class($randomConverter)
-        . ' -> ' . json_encode($randomConverter->get($randomStrings)) . PHP_EOL;
+        . ' -> ' . json_encode($randomConverter->convert($randomStrings)) . PHP_EOL;
+}
+
+/**
+ * Retrieve a random converter form converter pool
+ *
+ * @return Converter
+ *
+ * @throws Exception
+ */
+function getRandomConverter(): Converter
+{
+    global $containerBuilder;
+    $converterPool = [
+        $containerBuilder->get(StringToNumberStringConverter::class),
+        $containerBuilder->get(Rot13Converter::class)
+    ];
+    return $converterPool[random_int(0, count($converterPool) - 1)];
 }
