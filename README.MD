@@ -10,7 +10,22 @@ composer install
 php src/index.php
 ```
 
-### How to run tests
+### How to run ci (automatically runs PHPUnit, PHPStan and PHP_CodeSniffer)
 ```shell
-vendor/bin/phpunit .
+composer ci
+```
+
+### How to run PHPUnit
+```shell
+./vendor/bin/phpunit tests
+```
+
+### How to run PHPStan
+```shell
+./vendor/bin/phpstan --level=9 analyze src
+```
+
+### How to run PHP_CodeSniffer
+```shell
+./vendor/bin/phpcs src
 ```
