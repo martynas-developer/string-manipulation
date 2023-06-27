@@ -48,15 +48,18 @@ $generatorPool = [
 
 foreach ($generatorPool as $generator) {
     /**
-     * Generator variable
+     * Generator
      *
      * @var RandomStringGenerator|RandomArrayOfStringsGenerator $generator
     */
     $randomConverter = getRandomConverter();
     $randomStrings = $generator->generate();
+    $convertedResult = is_array($randomStrings)
+        ? $randomConverter->convertArray($randomStrings)
+        : $randomConverter->convert($randomStrings);
     echo json_encode($randomStrings)
         . ' -> ' . get_class($randomConverter)
-        . ' -> ' . json_encode($randomConverter->convert($randomStrings)) . PHP_EOL;
+        . ' -> ' . json_encode($convertedResult) . PHP_EOL;
 }
 
 /**

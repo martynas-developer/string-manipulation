@@ -7,30 +7,47 @@ use PHPUnit\Framework\TestCase;
 
 class Rot13Test extends TestCase
 {
-    public function testCorrectConvertion(): void
+    private Rot13Converter|null $rot13Converter;
+
+    protected function setUp(): void
     {
+        $this->rot13Converter = new Rot13Converter();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->rot13Converter = null;
+    }
+
+    public function testCorrectConversion(): void
+    {
+
         $this->assertEquals(
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-            Rot13Converter::convert('NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm')
+            $this->rot13Converter->convert('NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm')
         );
     }
 
-    public function testDuobleConverstion(): void
+    public function testDoubleConversion(): void
     {
         $this->assertEquals(
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-            Rot13Converter::convert(Rot13Converter::convert('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'))
+            $this->rot13Converter->convert(
+                $this->rot13Converter->convert(
+                    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+                )
+            )
         );
     }
 
     public function testNumbersDontBreak(): void
     {
-        $this->assertEquals('123', Rot13Converter::convert('123'));
+        $this->assertEquals('123', $this->rot13Converter->convert('123'));
     }
 
     public function testArray(): void
     {
-        $this->assertEquals(['123','123'], Rot13Converter::convert(['123', '123']));
-        $this->assertEquals(['ABC','ABC'], Rot13Converter::convert(['NOP', 'NOP']));
+        $this->assertEquals(['123','123'], $this->rot13Converter->convertArray(['123', '123']));
+        $this->assertEquals(['ABC','ABC'], $this->rot13Converter->convertArray(['NOP', 'NOP']));
     }
 }

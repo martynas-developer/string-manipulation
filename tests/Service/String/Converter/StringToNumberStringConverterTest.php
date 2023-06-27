@@ -7,16 +7,29 @@ use PHPUnit\Framework\TestCase;
 
 class StringToNumberStringConverterTest extends TestCase
 {
-    public function testCorrectConvertion(): void
+    private StringToNumberStringConverter|null $stringToNumberStringConverter;
+
+    protected function setUp(): void
     {
-        $this->assertEquals('121', StringToNumberStringConverter::convert(121));
-        $this->assertEquals('123/1/2/3', StringToNumberStringConverter::convert('123abc'));
-        $this->assertEquals('1/1/1/1/1', StringToNumberStringConverter::convert('a1a1a'));
+        $this->stringToNumberStringConverter = new StringToNumberStringConverter();
     }
 
-    public function testCorrectArrayConvertion(): void
+    protected function tearDown(): void
     {
-        $this->assertEquals(['121'], StringToNumberStringConverter::convert(['121']));
-        $this->assertEquals(['123/1/2/3', '123/1/2/3'], StringToNumberStringConverter::convert(['123abc', '123abc']));
+        $this->stringToNumberStringConverter = null;
+    }
+
+    public function testCorrectConversion(): void
+    {
+        $this->assertEquals('121', $this->stringToNumberStringConverter->convert(121));
+        $this->assertEquals('123/1/2/3', $this->stringToNumberStringConverter->convert('123abc'));
+        $this->assertEquals('1/1/1/1/1', $this->stringToNumberStringConverter->convert('a1a1a'));
+        $this->assertEquals('1/1/2/2', $this->stringToNumberStringConverter->convert('aABb'));
+    }
+
+    public function testCorrectArrayConversion(): void
+    {
+        $this->assertEquals(['121'], $this->stringToNumberStringConverter->convertArray(['121']));
+        $this->assertEquals(['123/1/2/3', '123/1/2/3'], $this->stringToNumberStringConverter->convertArray(['123abc', '123abc']));
     }
 }

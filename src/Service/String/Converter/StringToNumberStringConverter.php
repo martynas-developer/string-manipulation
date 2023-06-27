@@ -24,35 +24,13 @@ namespace App\Service\String\Converter;
 class StringToNumberStringConverter implements Converter
 {
     /**
-     * Convert a string or array of strings
-     *
-     * @param string|string[] $strings strings to be converted
-     *
-     * @return string|string[]
-     */
-    public static function convert(string|array $strings): string|array
-    {
-        $isArray = true;
-        if (!is_array($strings)) {
-            $strings = [$strings];
-            $isArray = false;
-        }
-
-        $convertedStrings = [];
-        foreach ($strings as $string) {
-            $convertedStrings[] = self::_convertString($string);
-        }
-        return $isArray ? $convertedStrings : $convertedStrings[0];
-    }
-
-    /**
      * Converts string according to a pattern
      *
      * @param string $string string to be converted
      *
      * @return string
      */
-    private static function _convertString(string $string): string
+    public function convert(string $string): string
     {
         $separator = '/';
         $array = preg_split(
@@ -69,5 +47,21 @@ class StringToNumberStringConverter implements Converter
             }
         }
         return implode($separator, $array);
+    }
+
+    /**
+     * Convert array of strings
+     *
+     * @param string[] $strings strings to be converted
+     *
+     * @return string[]
+     */
+    public function convertArray(array $strings): array
+    {
+        $convertedStrings = [];
+        foreach ($strings as $string) {
+            $convertedStrings[] = $this->convert($string);
+        }
+        return $convertedStrings;
     }
 }

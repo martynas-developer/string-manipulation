@@ -27,9 +27,18 @@ interface Converter
     /**
      * Function to convert string to another string
      *
-     * @param string|string[] $strings string or array of strings to be converted
+     * @param string $string string to be converted
      *
-     * @return string|string[]
+     * @return string
      */
-    public static function convert(string|array $strings): string|array;
+    public function convert(string $string): string;
+
+    /**
+     * Function to convert strings to another strings
+     *
+     * @param string[] $strings array of strings to be converted
+     *
+     * @return string[]
+     */
+    public function convertArray(array $strings): array;
 }

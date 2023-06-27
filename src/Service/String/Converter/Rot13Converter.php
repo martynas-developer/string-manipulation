@@ -24,36 +24,13 @@ namespace App\Service\String\Converter;
 class Rot13Converter implements Converter
 {
     /**
-     * Rotate a string or array of strings
-     *
-     * @param string|string[] $strings strings to be rotated
-     * 
-     * @return string|string[]
-     */
-    public static function convert(string|array $strings): string|array
-    {
-        $isArray = true;
-        if (!is_array($strings)) {
-            $strings = [$strings];
-            $isArray = false;
-        }
-
-        $convertedStrings = [];
-        foreach ($strings as $string) {
-            $convertedStrings[] = self::_convertString($string);
-        }
-
-        return $isArray ? $convertedStrings : $convertedStrings[0];
-    }
-
-    /**
      * Converts a string to rot13 string
      *
      * @param string $string string to be converted
-     *
+     * 
      * @return string
      */
-    private static function _convertString(string $string): string
+    public function convert(string $string): string
     {
         $inputSymbol = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
         $outputSymbol = 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm';
@@ -63,5 +40,21 @@ class Rot13Converter implements Converter
             $convertedString .= $index !== false ? $outputSymbol[$index] : $symbol;
         }
         return $convertedString;
+    }
+
+    /**
+     * Convert array of strings
+     *
+     * @param string[] $strings strings to be converted
+     *
+     * @return string[]
+     */
+    public function convertArray(array $strings): array
+    {
+        $convertedStrings = [];
+        foreach ($strings as $string) {
+            $convertedStrings[] = $this->convert($string);
+        }
+        return $convertedStrings;
     }
 }
